@@ -138,7 +138,7 @@ const Profile: React.FC = () => {
     ImagePicker.showImagePicker({
       title: 'Selecione um avatar',
       cancelButtonTitle: 'Cancelar',
-      takePhotoButtonTitle: 'User câmera',
+      takePhotoButtonTitle: 'Usar câmera',
       chooseFromLibraryButtonTitle: 'Escolher da galeria'
     }, response => {
       if (response.didCancel) {
@@ -146,14 +146,24 @@ const Profile: React.FC = () => {
       }
       if (response.error) {
         Alert.alert('Erro ao atualizar seu avatar');
+        console.log(response.error);
         return;
       }
 
-      const source = { uri: response.uri };
+      const data = new FormData();
 
-      console.log(source);
+      data.append('avatar', {
+        uri: response.uri,
+        type: 'image/jpg',
+        name: `${user.id}.jpg`
+      });
+
+      api.patch('/users/avatar', data).then(response => {
+        updateUser(response.data);
+      });
+
     });
-  }, []);
+  }, [updateUser, user.id]);
 
   return (
     <>
