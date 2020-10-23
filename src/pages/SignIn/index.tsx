@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -6,22 +6,22 @@ import {
   View,
   ScrollView,
   TextInput,
-  Alert
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import * as Yup from 'yup';
-import { Form } from '@unform/mobile';
-import { FormHandles } from '@unform/core';
-import Icon from 'react-native-vector-icons/Feather';
+  Alert,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import * as Yup from "yup";
+import { Form } from "@unform/mobile";
+import { FormHandles } from "@unform/core";
+import Icon from "react-native-vector-icons/Feather";
 
-import getValidationErrors from '../../utils/getValidationErrors';
+import getValidationErrors from "../../utils/getValidationErrors";
 
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from "../../hooks/auth";
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import Input from "../../components/Input";
+import Button from "../../components/Button";
 
-import logoImg from '../../assets/logo.png';
+import logoImg from "../../assets/logo.png";
 
 import {
   Container,
@@ -29,8 +29,8 @@ import {
   ForgotPassword,
   ForgotPasswordText,
   CreateAccountButton,
-  CreateAccountButtonText
-} from './styles';
+  CreateAccountButtonText,
+} from "./styles";
 
 interface SignInFormData {
   email: string;
@@ -51,11 +51,10 @@ const SignIn: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          email: Yup
-            .string()
-            .required('E-mail obrigatório')
-            .email('Digite um e-mail válido'),
-          password: Yup.string().required('Senha obrigatória'),
+          email: Yup.string()
+            .required("E-mail obrigatório")
+            .email("Digite um e-mail válido"),
+          password: Yup.string().required("Senha obrigatória"),
         });
 
         await schema.validate(data, {
@@ -66,7 +65,6 @@ const SignIn: React.FC = () => {
           email: data.email,
           password: data.password,
         });
-
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -79,18 +77,18 @@ const SignIn: React.FC = () => {
         console.log(err);
 
         Alert.alert(
-          'Erro na autenticação',
-          'Ocorreu um erro ao fazer login, cheque as credenciais.'
+          "Erro na autenticação",
+          "Ocorreu um erro ao fazer login, cheque as credenciais."
         );
       }
     },
-    [signIn],
+    [signIn]
   );
   return (
     <>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
         enabled
       >
         <ScrollView
@@ -104,7 +102,11 @@ const SignIn: React.FC = () => {
               <Title>Faça seu logon</Title>
             </View>
 
-            <Form ref={formRef} onSubmit={handleSignIn} style={{ width: '100%' }} >
+            <Form
+              ref={formRef}
+              onSubmit={handleSignIn}
+              style={{ width: "100%" }}
+            >
               <Input
                 autoCorrect={false}
                 autoCapitalize="none"
@@ -123,30 +125,33 @@ const SignIn: React.FC = () => {
                 name="password"
                 icon="lock"
                 placeholder="Senha"
+                keyboardType="visible-password"
                 returnKeyType="send"
                 onSubmitEditing={() => {
                   formRef.current?.submitForm();
                 }}
               />
 
-              <Button onPress={() => {
-                formRef.current?.submitForm();
-              }} >Entrar</Button>
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Entrar
+              </Button>
             </Form>
 
-            <ForgotPassword onPress={() => { }} >
+            <ForgotPassword onPress={() => {}}>
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
             </ForgotPassword>
-
-
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
-      <CreateAccountButton onPress={() => navigation.navigate('SignUp')} >
+      <CreateAccountButton onPress={() => navigation.navigate("SignUp")}>
         <Icon name="log-in" size={20} color="#ff9000" />
         <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
       </CreateAccountButton>
     </>
-  )
-}
+  );
+};
 export default SignIn;
